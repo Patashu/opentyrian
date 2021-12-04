@@ -42,7 +42,7 @@ enum
 	SA_ARCADE = 255
 };
 
-#define ENEMY_SHOT_MAX  60 /* 60*/
+#define ENEMY_SHOT_MAX  254 /* 254*/
 
 #define CURRENT_KEY_SPEED 1  /*Keyboard/Joystick movement rate*/
 
