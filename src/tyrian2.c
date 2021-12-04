@@ -366,14 +366,8 @@ enemy_still_exists:
 
 					if (--enemy[i].eshotwait[j-1] == 0 && temp3)
 					{
-						enemy[i].eshotwait[j-1] = enemy[i].freq[j-1];
-						if (difficultyLevel > 2)
-						{
-							enemy[i].eshotwait[j-1] = (enemy[i].eshotwait[j-1] / 2) + 1;
-							if (difficultyLevel > 7)
-								enemy[i].eshotwait[j-1] = (enemy[i].eshotwait[j-1] / 2) + 1;
-						}
-
+						enemy[i].eshotwait[j-1] = 1;
+						
 						if (galagaMode && (enemy[i].eyc == 0 || (mt_rand() % 400) >= galagaShotFreq))
 							goto draw_enemy_end;
 
