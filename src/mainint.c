@@ -4435,7 +4435,7 @@ void JE_playerCollide( Player *this_player, JE_byte playerNum_ )
 					}
 					JE_setupExplosion(enemy_screen_x, enemy[z].ey, 0, enemyDat[enemy[z].enemytype].explosiontype, true, false);
 				}
-				else if (*this_player->invulnerable_ticks == 0 && enemyAvail[z] == 0 &&
+				else if ((this_player->invulnerable_ticks == 0 && enemyAvail[z] == 0 &&
 				         (enemyDat[enemy[z].enemytype].explosiontype & 1) == 0) && (abs(this_player->x - enemy_screen_x) < 4 && abs(this_player->y - enemy[z].ey) < 4)) // explosiontype & 1 == 0: not ground enemy
 				{
 					int armorleft = enemy[z].armorleft;
