@@ -530,7 +530,7 @@ void JE_specialComplete( JE_byte playerNum, JE_byte specialType )
 			break;
 		/*Attractor*/
 		case 4:
-			for (temp = 0; temp < 100; temp++)
+			for (temp = 0; temp < ENEMY_MAX; temp++)
 			{
 				if (enemyAvail[temp] != 1 && enemy[temp].scoreitem
 				    && enemy[temp].evalue != 0)

@@ -65,7 +65,8 @@ JE_boolean quit, loadLevelOk;
 struct JE_EventRecType eventRec[EVENT_MAXIMUM]; /* [1..eventMaximum] */
 JE_word levelEnemyMax;
 JE_word levelEnemyFrequency;
-JE_word levelEnemy[40]; /* [1..40] */
+JE_word levelEnemy[LEVEL_ENEMY_MAX]; /* [1..40] */
+#define LEVEL_ENEMY_MAX 40
 
 char tempStr[31];
 
@@ -541,7 +542,7 @@ enemy_still_exists:
 			{
 				if (--enemy[i].launchwait == 0)
 				{
-					enemy[i].launchwait = enemy[i].launchfreq;
+					enemy[i].launchwait = 1;
 
 					if (enemy[i].launchspecial != 0)
 					{
@@ -597,7 +598,7 @@ enemy_still_exists:
 						soundQueue[temp] = randomEnemyLaunchSounds[(mt_rand() % 3)];
 
 						if (enemy[i].launchspecial == 1
-						    && enemy[i].linknum < 100)
+						    && enemy[i].linknum < ENEMY_MAX)
 						{
 							e->linknum = enemy[i].linknum;
 						}
@@ -841,7 +842,7 @@ start_level_first:
 	smallEnemyAdjust = false;
 	starActive = true;
 	enemyContinualDamage = false;
-	levelEnemyFrequency = 96;
+	levelEnemyFrequency = 100-4*RANDOM_ENEMY_MULTIPLIER;
 	quitRequested = false;
 
 	for (unsigned int i = 0; i < COUNTOF(boss_bar); i++)
@@ -1449,7 +1450,7 @@ level_loop:
 				goto draw_player_shot_loop_end;
 			}
 
-			for (b = 0; b < 100; b++)
+			for (b = 0; b < ENEMY_MAX; b++)
 			{
 				if (enemyAvail[b] == 0)
 				{
@@ -1557,7 +1558,7 @@ level_loop:
 							    ((!enemy[b].edamaged) ^ (enemy[b].edani < 0)))
 							{
 
-								for (temp3 = 0; temp3 < 100; temp3++)
+								for (temp3 = 0; temp3 < ENEMY_MAX; temp3++)
 								{
 									if (enemyAvail[temp3] != 1)
 									{
@@ -1626,7 +1627,7 @@ level_loop:
 							if ((temp == 254) && (superEnemy254Jump > 0))
 								JE_eventJump(superEnemy254Jump);
 
-							for (temp2 = 0; temp2 < 100; temp2++)
+							for (temp2 = 0; temp2 < ENEMY_MAX; temp2++)
 							{
 								if (enemyAvail[temp2] != 1)
 								{
@@ -3033,6 +3034,7 @@ new_game:
 	fread_u16_die(&mapX3, 1, level_f);
 
 	fread_u16_die(&levelEnemyMax, 1, level_f);
+	levelEnemyMax = LEVEL_ENEMY_MAX;
 	fread_u16_die(levelEnemy, levelEnemyMax, level_f);
 
 	fread_u16_die(&maxEvent, 1, level_f);
@@ -4100,7 +4102,7 @@ bool JE_searchFor/*enemy*/( JE_byte PLType, JE_byte* out_index )
 {
 	int found_id = -1;
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < ENEMY_MAX; i++)
 	{
 		if (enemyAvail[i] == 0 && enemy[i].linknum == PLType)
 		{
@@ -4383,7 +4385,7 @@ void JE_eventSystem( void )
 		if (eventRec[eventLoc-1].eventdat3 > 79 && eventRec[eventLoc-1].eventdat3 < 90)
 			eventRec[eventLoc-1].eventdat4 = newPL[eventRec[eventLoc-1].eventdat3 - 80];
 
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (enemyAvail[temp] != 1
 			    && (enemy[temp].linknum == eventRec[eventLoc-1].eventdat4 || eventRec[eventLoc-1].eventdat4 == 0))
@@ -4440,7 +4442,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 24: /* Enemy Global Animate */
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4474,7 +4476,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 25: /* Enemy Global Damage change */
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (eventRec[eventLoc-1].eventdat4 == 0 || enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4494,7 +4496,7 @@ void JE_eventSystem( void )
 		if (eventRec[eventLoc-1].eventdat3 > 79 && eventRec[eventLoc-1].eventdat3 < 90)
 			eventRec[eventLoc-1].eventdat4 = newPL[eventRec[eventLoc-1].eventdat3 - 80];
 
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (eventRec[eventLoc-1].eventdat4 == 0 || enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4529,7 +4531,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 31: /* Enemy Fire Override */
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (eventRec[eventLoc-1].eventdat4 == 99 || enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4576,7 +4578,7 @@ void JE_eventSystem( void )
 			if (eventRec[eventLoc-1].eventdat == 534 && superTyrian)
 				eventRec[eventLoc-1].eventdat = 828 + superTyrianSpecials[mt_rand() % 4];
 
-			for (temp = 0; temp < 100; temp++)
+			for (temp = 0; temp < ENEMY_MAX; temp++)
 			{
 				if (enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 					enemy[temp].enemydie = eventRec[eventLoc-1].eventdat;
@@ -4606,7 +4608,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 37:
-		levelEnemyFrequency = eventRec[eventLoc-1].eventdat;
+		levelEnemyFrequency = (100-(100-eventRec[eventLoc-1].eventdat)*RANDOM_ENEMY_MULTIPLIER);
 		break;
 
 	case 38:
@@ -4623,7 +4625,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 39: /* Enemy Global Linknum Change */
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (enemy[temp].linknum == eventRec[eventLoc-1].eventdat)
 				enemy[temp].linknum = eventRec[eventLoc-1].eventdat2;
@@ -4675,7 +4677,7 @@ void JE_eventSystem( void )
 			}
 			if (twoPlayerMode || onePlayerAction)
 			{
-				for (temp = 0; temp < 100; temp++)
+				for (temp = 0; temp < ENEMY_MAX; temp++)
 				{
 					if (enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 						enemy[temp].enemydie = eventRec[eventLoc-1].eventdat;
@@ -4699,7 +4701,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 47: /* Enemy Global AccelRev */
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (eventRec[eventLoc-1].eventdat4 == 0 || enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 				enemy[temp].armorleft = eventRec[eventLoc-1].eventdat;
@@ -4755,7 +4757,7 @@ void JE_eventSystem( void )
 		if (eventRec[eventLoc-1].eventdat3 > 79 && eventRec[eventLoc-1].eventdat3 < 90)
 			eventRec[eventLoc-1].eventdat4 = newPL[eventRec[eventLoc-1].eventdat3 - 80];
 
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (eventRec[eventLoc-1].eventdat4 == 0 || enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4778,7 +4780,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 60: /*Assign Special Enemy*/
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4873,7 +4875,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 74: /* Enemy Global BounceParams */
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (eventRec[eventLoc-1].eventdat4 == 0 || enemy[temp].linknum == eventRec[eventLoc-1].eventdat4)
 			{
@@ -4895,7 +4897,7 @@ void JE_eventSystem( void )
 	case 75:;
 		bool temp_no_clue = false; // TODO: figure out what this is doing
 
-		for (temp = 0; temp < 100; temp++)
+		for (temp = 0; temp < ENEMY_MAX; temp++)
 		{
 			if (enemyAvail[temp] == 0
 			    && enemy[temp].eyc == 0

@@ -4133,7 +4133,7 @@ void JE_playerCollide( Player *this_player, JE_byte playerNum_ )
 {
 	char tempStr[256];
 
-	for (int z = 0; z < 100; z++)
+	for (int z = 0; z < ENEMY_MAX; z++)
 	{
 		if (enemyAvail[z] != 1)
 		{
@@ -4471,7 +4471,7 @@ void JE_playerCollide( Player *this_player, JE_byte playerNum_ )
 					else
 					{
 						// kill enemy
-						for (temp2 = 0; temp2 < 100; temp2++)
+						for (temp2 = 0; temp2 < ENEMY_MAX; temp2++)
 						{
 							if (enemyAvail[temp2] != 1)
 							{

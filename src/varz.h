@@ -42,7 +42,9 @@ enum
 	SA_ARCADE = 255
 };
 
-#define ENEMY_SHOT_MAX  254 /* 254*/
+#define ENEMY_SHOT_MAX 254 /* 254*/
+#define ENEMY_MAX 100
+#define RANDOM_ENEMY_MULTIPLIER 1
 
 #define CURRENT_KEY_SPEED 1  /*Keyboard/Joystick movement rate*/
 
@@ -111,7 +113,7 @@ struct JE_SingleEnemyType
 	JE_byte     fill[3]; /* [1..3] */
 };
 
-typedef struct JE_SingleEnemyType JE_MultiEnemyType[100]; /* [1..100] */
+typedef struct JE_SingleEnemyType JE_MultiEnemyType[ENEMY_MAX]; /* [1..100] */
 
 typedef JE_byte JE_DanCShape[24 * 28]; /* [1..(24*28) div 2] OF WORD */
 
@@ -167,7 +169,7 @@ struct JE_MegaDataType3
 	JE_byte tempdat3;
 };
 
-typedef JE_byte JE_EnemyAvailType[100]; /* [1..100] */
+typedef JE_byte JE_EnemyAvailType[ENEMY_MAX]; /* [1..100] */
 
 typedef struct {
 	JE_integer sx, sy;
