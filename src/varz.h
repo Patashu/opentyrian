@@ -47,7 +47,7 @@ enum
 #define LEVEL_ENEMY_MAX 40
 #define RANDOM_ENEMY_MULTIPLIER 2
 #define LAUNCHER_FREQ_MULTIPLIER 8
-#define BULLET_FREQ_MULTIPLIER 8
+#define BULLET_FREQ_MULTIPLIER 12
 
 #define CURRENT_KEY_SPEED 1  /*Keyboard/Joystick movement rate*/
 

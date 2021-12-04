@@ -364,8 +364,8 @@ void JE_getShipInfo( void )
 	{
 		player[i].initial_armor = player[i].armor;
 
-		player[i].shot_hit_area_x = 4;
-		player[i].shot_hit_area_y = 4;
+		player[i].shot_hit_area_x = 6;
+		player[i].shot_hit_area_y = 6;
 	}
 }
 
