@@ -42,12 +42,16 @@ enum
 	SA_ARCADE = 255
 };
 
-#define ENEMY_SHOT_MAX 254 /* 254*/
-#define ENEMY_MAX 254
+//can be whatever, 1000 seems fine
+#define ENEMY_SHOT_MAX 1000
+//must be a multiple of 4!
+#define ENEMY_MAX 1000
+//constant - don't change this
 #define LEVEL_ENEMY_MAX 40
+//change these all you like :B
 #define RANDOM_ENEMY_MULTIPLIER 2
-#define LAUNCHER_FREQ_MULTIPLIER 8
-#define BULLET_FREQ_MULTIPLIER 12
+#define LAUNCHER_FREQ_MULTIPLIER 100
+#define BULLET_FREQ_MULTIPLIER 100
 
 #define CURRENT_KEY_SPEED 1  /*Keyboard/Joystick movement rate*/
 
@@ -69,7 +73,7 @@ struct JE_SingleEnemyType
 	JE_byte     ani;
 	JE_word     egr[20]; /* [1..20] */
 	JE_byte     size;
-	JE_byte     linknum;
+	JE_word     linknum;
 	JE_byte     aniactive;
 	JE_byte     animax;
 	JE_byte     aniwhenfire;
@@ -314,7 +318,7 @@ extern JE_word neat;
 extern rep_explosion_type rep_explosions[MAX_REPEATING_EXPLOSIONS];
 extern superpixel_type superpixels[MAX_SUPERPIXELS];
 extern unsigned int last_superpixel;
-extern JE_byte temp, temp2, temp3;
+extern JE_word temp, temp2, temp3;
 extern JE_word tempX, tempY;
 extern JE_word tempW;
 extern JE_boolean doNotSaveBackup;

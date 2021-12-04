@@ -177,7 +177,7 @@ void JE_drawEnemy( int enemyOffset ) // actually does a whole lot more than just
 {
 	player[0].x -= 25;
 
-	for (int i = enemyOffset - 25; i < enemyOffset; i++)
+	for (int i = enemyOffset - ENEMY_MAX/4; i < enemyOffset; i++)
 	{
 		if (enemyAvail[i] != 1)
 		{
@@ -567,7 +567,7 @@ enemy_still_exists:
 						goto draw_enemy_end;
 
 					tempW = enemy[i].launchtype;
-					b = JE_newEnemy(enemyOffset == 50 ? 75 : enemyOffset - 25, tempW, 0);
+					b = JE_newEnemy(enemyOffset == ENEMY_MAX/2 ? ENEMY_MAX*3/4 : enemyOffset - ENEMY_MAX/4, tempW, 0);
 
 					/*Launch Enemy Placement*/
 					if (b > 0)
@@ -1349,8 +1349,8 @@ level_loop:
 
 	tempMapXOfs = mapXOfs;
 	tempBackMove = backMove;
-	JE_drawEnemy(50);
-	JE_drawEnemy(100);
+	JE_drawEnemy(ENEMY_MAX/2);
+	JE_drawEnemy(ENEMY_MAX);
 
 	if (enemyOnScreen == 0 || enemyOnScreen == lastEnemyOnScreen)
 	{
@@ -1420,7 +1420,7 @@ level_loop:
 
 		tempMapXOfs = mapX2Ofs;
 		tempBackMove = 0;
-		JE_drawEnemy(25);
+		JE_drawEnemy(ENEMY_MAX/4);
 
 		if (enemyOnScreen == lastEnemyOnScreen)
 		{
@@ -1437,7 +1437,7 @@ level_loop:
 	{
 		tempMapXOfs = (background3x1 == 0) ? oldMapX3Ofs : mapXOfs;
 		tempBackMove = backMove3;
-		JE_drawEnemy(75);
+		JE_drawEnemy(ENEMY_MAX*3/4);
 	}
 
 	/* Player Shot Images */
@@ -1658,7 +1658,7 @@ level_loop:
 										{
 											int temp_b = b;
 											tempW = enemy[temp2].enemydie;
-											int enemy_offset = temp2 - (temp2 % 25);
+											int enemy_offset = temp2 - (temp2 % (ENEMY_MAX/4));
 											if (enemyDat[tempW].value > 30000)
 											{
 												enemy_offset = 0;
@@ -1880,7 +1880,7 @@ draw_player_shot_loop_end:
 	{
 		tempMapXOfs = (background3x1 == 0) ? oldMapX3Ofs : oldMapXOfs;
 		tempBackMove = backMove3;
-		JE_drawEnemy(75);
+		JE_drawEnemy(ENEMY_MAX*3/4);
 	}
 
 	/* Draw Sky Enemy */
@@ -1890,7 +1890,7 @@ draw_player_shot_loop_end:
 
 		tempMapXOfs = mapX2Ofs;
 		tempBackMove = 0;
-		JE_drawEnemy(25);
+		JE_drawEnemy(ENEMY_MAX/4);
 
 		if (enemyOnScreen == lastEnemyOnScreen)
 		{
@@ -2006,7 +2006,7 @@ draw_player_shot_loop_end:
 		else
 		{
 			tempW = 560;
-			b = JE_newEnemy(50, tempW, 0);
+			b = JE_newEnemy(ENEMY_MAX/2, tempW, 0);
 			if (b > 0)
 			{
 				enemy[b-1].enemydie = 560 + (mt_rand() % 3) + 1;
@@ -3041,7 +3041,6 @@ new_game:
 	fread_u16_die(&mapX3, 1, level_f);
 
 	fread_u16_die(&levelEnemyMax, 1, level_f);
-	//levelEnemyMax = LEVEL_ENEMY_MAX; //makes it crash idk
 	fread_u16_die(levelEnemy, levelEnemyMax, level_f);
 
 	fread_u16_die(&maxEvent, 1, level_f);
@@ -3726,7 +3725,7 @@ void JE_displayText( void )
 
 Sint16 JE_newEnemy( int enemyOffset, Uint16 eDatI, Sint16 uniqueShapeTableI )
 {
-	for (int i = enemyOffset; i < enemyOffset + 25; ++i)
+	for (int i = enemyOffset; i < enemyOffset + ENEMY_MAX/4; ++i)
 	{
 		if (enemyAvail[i] == 1)
 		{
@@ -4018,7 +4017,7 @@ void JE_createNewEventEnemy( JE_byte enemyTypeOfs, JE_word enemyOffset, Sint16 u
 
 	b = 0;
 
-	for(i = enemyOffset; i < enemyOffset + 25; i++)
+	for(i = enemyOffset; i < enemyOffset + ENEMY_MAX/4; i++)
 	{
 		if (enemyAvail[i] == 1)
 		{
@@ -4044,12 +4043,12 @@ void JE_createNewEventEnemy( JE_byte enemyTypeOfs, JE_word enemyOffset, Sint16 u
 			enemy[b-1].ex = eventRec[eventLoc-1].eventdat2 - (mapX - 1) * 24;
 			enemy[b-1].ey -= backMove2;
 			break;
-		case 25:
-		case 75:
+		case ENEMY_MAX/4:
+		case ENEMY_MAX*3/4:
 			enemy[b-1].ex = eventRec[eventLoc-1].eventdat2 - (mapX - 1) * 24 - 12;
 			enemy[b-1].ey -= backMove;
 			break;
-		case 50:
+		case ENEMY_MAX/2:
 			if (background3x1)
 			{
 				enemy[b-1].ex = eventRec[eventLoc-1].eventdat2 - (mapX - 1) * 24 - 12;
@@ -4065,7 +4064,7 @@ void JE_createNewEventEnemy( JE_byte enemyTypeOfs, JE_word enemyOffset, Sint16 u
 			break;
 		}
 		enemy[b-1].ey = -28;
-		if (background3x1b && enemyOffset == 50)
+		if (background3x1b && enemyOffset == ENEMY_MAX/2)
 		{
 			enemy[b-1].ey += 4;
 		}
@@ -4215,11 +4214,11 @@ void JE_eventSystem( void )
 		break;
 
 	case 6: /* Ground Enemy */
-		JE_createNewEventEnemy(0, 25, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX/4, 0);
 		break;
 
 	case 7: /* Top Enemy */
-		JE_createNewEventEnemy(0, 50, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX/2, 0);
 		break;
 
 	case 8:
@@ -4231,7 +4230,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 10: /* Ground Enemy 2 */
-		JE_createNewEventEnemy(0, 75, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX*3/4, 0);
 		break;
 
 	case 11:
@@ -4253,16 +4252,16 @@ void JE_eventSystem( void )
 			{
 			case 0:
 			case 1:
-				temp = 25;
+				temp = ENEMY_MAX/4;
 				break;
 			case 2:
 				temp = 0;
 				break;
 			case 3:
-				temp = 50;
+				temp = ENEMY_MAX/2;
 				break;
 			case 4:
-				temp = 75;
+				temp = ENEMY_MAX*3/4;
 				break;
 			}
 			eventRec[eventLoc-1].eventdat6 = 0;   /* We use EVENTDAT6 for the background */
@@ -4306,7 +4305,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 17: /* Ground Bottom */
-		JE_createNewEventEnemy(0, 25, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX/4, 0);
 		if (b > 0)
 		{
 			enemy[b-1].ey = 190 + eventRec[eventLoc-1].eventdat5;
@@ -4339,27 +4338,27 @@ void JE_eventSystem( void )
 			{
 			case 0:
 				initial_i = 0;
-				max_i = 100;
+				max_i = ENEMY_MAX;
 				all_enemies = false;
 				break;
 			case 2:
 				initial_i = 0;
-				max_i = 25;
+				max_i = ENEMY_MAX/4;
 				all_enemies = true;
 				break;
 			case 1:
-				initial_i = 25;
-				max_i = 50;
+				initial_i = ENEMY_MAX/4;
+				max_i = ENEMY_MAX/2;
 				all_enemies = true;
 				break;
 			case 3:
-				initial_i = 50;
-				max_i = 75;
+				initial_i = ENEMY_MAX/2;
+				max_i = ENEMY_MAX*3/4;
 				all_enemies = true;
 				break;
 			case 99:
 				initial_i = 0;
-				max_i = 100;
+				max_i = ENEMY_MAX;
 				all_enemies = true;
 				break;
 			}
@@ -4443,7 +4442,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 23: /* Sky Enemy on Bottom */
-		JE_createNewEventEnemy(0, 50, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX/2, 0);
 		if (b > 0)
 			enemy[b-1].ey = 180 + eventRec[eventLoc-1].eventdat5;
 		break;
@@ -4559,7 +4558,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 32:  // create enemy
-		JE_createNewEventEnemy(0, 50, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX/2, 0);
 		if (b > 0)
 			enemy[b-1].ey = 190;
 		break;
@@ -4734,16 +4733,16 @@ void JE_eventSystem( void )
 		switch (eventRec[eventLoc-1].eventtype - 48)
 		{
 		case 1:
-			temp = 25;
+			temp = ENEMY_MAX/4;
 			break;
 		case 2:
 			temp = 0;
 			break;
 		case 3:
-			temp = 50;
+			temp = ENEMY_MAX/2;
 			break;
 		case 4:
-			temp = 75;
+			temp = ENEMY_MAX*3/4;
 			break;
 		}
 		JE_createNewEventEnemy(0, temp, tempDat);
@@ -4777,7 +4776,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 56: /* Ground2 Bottom */
-		JE_createNewEventEnemy(0, 75, 0);
+		JE_createNewEventEnemy(0, ENEMY_MAX*3/4, 0);
 		if (b > 0)
 			enemy[b-1].ey = 190;
 		break;
