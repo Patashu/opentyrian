@@ -364,20 +364,8 @@ void JE_getShipInfo( void )
 	{
 		player[i].initial_armor = player[i].armor;
 
-
-		uint temp = ((i == 0 && extraShip) ||
-		             (i == 1 && extraShip2)) ? 2 : ships[player[i].items.ship].ani;
-
-		if (temp == 0)
-		{
-			player[i].shot_hit_area_x = 12;
-			player[i].shot_hit_area_y = 10;
-		}
-		else
-		{
-			player[i].shot_hit_area_x = 11;
-			player[i].shot_hit_area_y = 14;
-		}
+		player[i].shot_hit_area_x = 4;
+		player[i].shot_hit_area_y = 4;
 	}
 }
 
