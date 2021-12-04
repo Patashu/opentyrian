@@ -3864,7 +3864,7 @@ uint JE_makeEnemy( struct JE_SingleEnemyType *enemy, Uint16 eDatI, Sint16 unique
 		if (enemy->tur[i] == 252)
 			enemy->eshotwait[i] = 1;
 		else if (enemy->tur[i] > 0)
-			enemy->eshotwait[i] = 20;
+			enemy->eshotwait[i] = 1;
 		else
 			enemy->eshotwait[i] = 255;
 	}
