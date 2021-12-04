@@ -66,7 +66,6 @@ struct JE_EventRecType eventRec[EVENT_MAXIMUM]; /* [1..eventMaximum] */
 JE_word levelEnemyMax;
 JE_word levelEnemyFrequency;
 JE_word levelEnemy[LEVEL_ENEMY_MAX]; /* [1..40] */
-#define LEVEL_ENEMY_MAX 40
 
 char tempStr[31];
 
