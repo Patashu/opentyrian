@@ -3033,7 +3033,7 @@ new_game:
 	fread_u16_die(&mapX3, 1, level_f);
 
 	fread_u16_die(&levelEnemyMax, 1, level_f);
-	levelEnemyMax = LEVEL_ENEMY_MAX;
+	//levelEnemyMax = LEVEL_ENEMY_MAX;
 	fread_u16_die(levelEnemy, levelEnemyMax, level_f);
 
 	fread_u16_die(&maxEvent, 1, level_f);
