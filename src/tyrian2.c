@@ -366,7 +366,11 @@ enemy_still_exists:
 
 					if (--enemy[i].eshotwait[j-1] == 0 && temp3)
 					{
-						enemy[i].eshotwait[j-1] = 1;
+						enemy[i].eshotwait[j-1] = enemy[i].freq[j-1] / BULLET_FREQ_MULTIPLIER;
+						if (enemy[i].eshotwait[j-1] < 1)
+						{
+							enemy[i].eshotwait[j-1] = 1;
+						}
 						
 						if (galagaMode && (enemy[i].eyc == 0 || (mt_rand() % 400) >= galagaShotFreq))
 							goto draw_enemy_end;
@@ -541,7 +545,11 @@ enemy_still_exists:
 			{
 				if (--enemy[i].launchwait == 0)
 				{
-					enemy[i].launchwait = 1;
+					enemy[i].launchwait = enemy[i].launchfreq / LAUNCHER_FREQ_MULTIPLIER;
+					if (enemy[i].launchwait < 1)
+					{
+						enemy[i].launchwait = 1;
+					}
 
 					if (enemy[i].launchspecial != 0)
 					{
